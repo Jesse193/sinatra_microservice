@@ -14,6 +14,8 @@ gem 'pry'
 gem 'jsonapi-serializer'
 gem 'csv'
 gem 'rackup'
+gem 'rack-cors'
+gem 'bcrypt'
 
 group :test do 
   gem 'database_cleaner-active_record'
