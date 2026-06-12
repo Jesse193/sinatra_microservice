@@ -10,7 +10,6 @@ Bundler.require(:default, :test)
 require File.expand_path('../../config/environment.rb', __FILE__)
 
 require 'factory_bot'
-require_relative 'factories'
 
 require 'simplecov'
 SimpleCov.start
@@ -33,5 +32,10 @@ RSpec.configure do |config|
   end
   config.after(:each) do
     DatabaseCleaner.clean
+  end
+  config.before(:suite) do
+    FactoryBot.definition_file_paths = [File.expand_path('../spec/factories', __dir__)]
+    
+    FactoryBot.find_definitions
   end
 end
