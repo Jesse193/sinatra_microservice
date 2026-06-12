@@ -1,2 +1,6 @@
 #Ignore simplecov files
 /coverage
+.env
+.env.test
+.env.local
+.env.*.local

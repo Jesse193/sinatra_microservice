@@ -16,6 +16,8 @@ gem 'csv'
 gem 'rackup'
 gem 'rack-cors'
 gem 'bcrypt'
+gem 'jwt'
+gem 'dotenv'
 
 group :test do 
   gem 'database_cleaner-active_record'

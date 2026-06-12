@@ -1,8 +1,13 @@
 require 'sinatra'
-
 require 'bundler'
 Bundler.require
 
-require File.expand_path('../config/environment',  __FILE__)
+require File.expand_path('../config/environment', __FILE__)
 
-run Microservice
+map '/' do
+  run MicroserviceApp
+end
+
+map '/api' do
+  use MarketsController
+  run UsersController

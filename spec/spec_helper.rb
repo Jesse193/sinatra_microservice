@@ -1,27 +1,23 @@
 ENV["RACK_ENV"] = "test"
 
+require 'simplecov'
+SimpleCov.start
+
 require 'rspec'
 require 'rack/test'
-
 require 'bundler'
 Bundler.require(:default, :test)
 
 
 require File.expand_path('../../config/environment.rb', __FILE__)
-
 require 'factory_bot'
-
-require 'simplecov'
-SimpleCov.start
-
-
-def app
-  Microservice
-end
-
 
 RSpec.configure do |config|
   config.include Rack::Test::Methods
+
+  def app
+    MicroserviceApp
+  end
   
   config.include FactoryBot::Syntax::Methods
   
@@ -35,7 +31,6 @@ RSpec.configure do |config|
   end
   config.before(:suite) do
     FactoryBot.definition_file_paths = [File.expand_path('../spec/factories', __dir__)]
-    
     FactoryBot.find_definitions
   end
 end
