@@ -12,6 +12,8 @@ gem 'rerun'
 gem 'rake'
 gem 'pry'
 gem 'jsonapi-serializer'
+gem 'csv'
+gem 'rackup'
 
 group :test do 
   gem 'database_cleaner-active_record'
