@@ -9,6 +9,7 @@ require_relative '../serializers/user_serializer'
 require_relative '../serializers/market_serializer'
 require_relative './user_controller'
 require_relative './market_controller'
+require_relative './user_favorite_controller'
 
 class MicroserviceApp < Sinatra::Base
   use Rack::Cors do
@@ -38,4 +39,5 @@ class MicroserviceApp < Sinatra::Base
 
   use MarketsController
   use UsersController
+  use UserFavoritesController
 end

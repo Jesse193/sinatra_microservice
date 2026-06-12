@@ -21,4 +21,7 @@ class Market < ActiveRecord::Base
           - radians(longitude))
       ) * 3958.8 <= #{location_params[:radius]}")
   end
+
+  has_many :user_favorites, dependent: :destroy
+  has_many :favorited_by, through: :user_favorites, source: :user
 end

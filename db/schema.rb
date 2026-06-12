@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_12_190133) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_12_210418) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -35,4 +35,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_12_190133) do
     t.string "password_digest"
     t.datetime "updated_at", null: false
   end
+
+  create_table "users_favorites", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "market_id", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["market_id"], name: "index_users_favorites_on_market_id"
+    t.index ["user_id", "market_id"], name: "index_users_favorites_on_user_id_and_market_id", unique: true
+    t.index ["user_id"], name: "index_users_favorites_on_user_id"
+  end
+
+  add_foreign_key "users_favorites", "markets"
+  add_foreign_key "users_favorites", "users"
 end
