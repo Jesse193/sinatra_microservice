@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '3.2.2'
+ruby '4.0.5'
 
 gem 'sinatra', require: 'sinatra/base'
 gem 'pg'
@@ -12,6 +12,12 @@ gem 'rerun'
 gem 'rake'
 gem 'pry'
 gem 'jsonapi-serializer'
+gem 'csv'
+gem 'rackup'
+gem 'rack-cors'
+gem 'bcrypt'
+gem 'jwt'
+gem 'dotenv'
 
 group :test do 
   gem 'database_cleaner-active_record'

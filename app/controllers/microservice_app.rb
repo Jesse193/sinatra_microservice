@@ -1,30 +1,43 @@
 require 'sinatra'
 require 'sinatra/activerecord'
 require 'sinatra/contrib'
+require 'rack/cors'
+require 'json'
+require_relative '../models/user'
+require_relative '../models/market'
+require_relative '../serializers/user_serializer'
+require_relative '../serializers/market_serializer'
+require_relative './user_controller'
+require_relative './market_controller'
+require_relative './user_favorite_controller'
 
-class Microservice < Sinatra::Base
-  
-  get '/' do 
-    'Hello World'
+class MicroserviceApp < Sinatra::Base
+  use Rack::Cors do
+    allow do
+      origins %r{\Ahttp://localhost(?::\d+)?\z}
+      resource '/*', headers: :any, methods: [:get, :post, :options]
+    end
   end
 
-  get '/markets' do 
-    markets = Market.all
-    json MarketSerializer.new(markets)
+  before do
+    content_type :json
   end
-  
-  get '/markets/search' do 
-    markets = Market.nearby_markets(params)
-    json MarketSerializer.new(markets)
+
+  helpers do
+    def authenticate_user!
+      auth_header = request.env['HTTP_AUTHORIZATION']
+      token = auth_header.split(' ').last if auth_header
+
+      decoded = JsonWebToken.decode(token) if token
+      @current_user = User.find_by(id: decoded[:user_id]) if decoded
+
+      unless @current_user
+        halt 401, { error: "Access Denied: Missing or invalid token" }.to_json
+      end
+    end
   end
-  
-  get '/markets/favorites' do 
-    markets = Market.find(params[:market_ids])
-    json MarketSerializer.new(markets)
-  end
-  
-  get '/markets/:id' do 
-    market = Market.find(params[:id])
-    json MarketSerializer.new(market)
-  end
+
+  use MarketsController
+  use UsersController
+  use UserFavoritesController
 end

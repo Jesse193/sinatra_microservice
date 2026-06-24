@@ -10,22 +10,42 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_14_203934) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_12_210418) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
+  enable_extension "pg_catalog.plpgsql"
 
   create_table "markets", force: :cascade do |t|
-    t.string "name"
+    t.string "accepted_payment"
     t.string "address"
-    t.string "site"
+    t.datetime "created_at", null: false
     t.string "description"
     t.string "fnap"
-    t.string "snap_option"
-    t.string "accepted_payment"
-    t.float "longitude"
     t.float "latitude"
-    t.datetime "created_at", null: false
+    t.float "longitude"
+    t.string "name"
+    t.string "site"
+    t.string "snap_option"
     t.datetime "updated_at", null: false
   end
 
+  create_table "users", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "email"
+    t.string "name"
+    t.string "password_digest"
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "users_favorites", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "market_id", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["market_id"], name: "index_users_favorites_on_market_id"
+    t.index ["user_id", "market_id"], name: "index_users_favorites_on_user_id_and_market_id", unique: true
+    t.index ["user_id"], name: "index_users_favorites_on_user_id"
+  end
+
+  add_foreign_key "users_favorites", "markets"
+  add_foreign_key "users_favorites", "users"
 end
