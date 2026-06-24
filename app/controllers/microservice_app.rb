@@ -14,7 +14,7 @@ require_relative './user_favorite_controller'
 class MicroserviceApp < Sinatra::Base
   use Rack::Cors do
     allow do
-      origins 'http://localhost:3000'
+      origins %r{\Ahttp://localhost(?::\d+)?\z}
       resource '/*', headers: :any, methods: [:get, :post, :options]
     end
   end

@@ -9,9 +9,11 @@ class UsersController < Sinatra::Base
 
   before do
     content_type :json
-    if request.body && request.body.respond_to?(:size) && request.body.size.to_i > 0
-      request.body.rewind
-      @payload = JSON.parse(request.body.read) rescue {}
+    @payload = {}
+
+    if request.body && request.body.respond_to?(:read)
+      body_text = request.body.read.to_s
+      @payload = JSON.parse(body_text) rescue {} unless body_text.strip.empty?
     end
   end
 
@@ -59,6 +61,9 @@ class UsersController < Sinatra::Base
     if user.save
       status 201
       { message: "User successfully registered", user_id: user.id }.to_json
+    else
+      status 422
+      { errors: user.errors.full_messages }.to_json
     end
   rescue => e
     status 422
