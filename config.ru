@@ -4,4 +4,11 @@ Bundler.require
 
 require File.expand_path('../config/environment', __FILE__)
 
-run MicroserviceApp
+map '/' do
+  run MicroserviceApp
+end
+
+map '/api' do
+  use MarketsController
+  run UsersController
+end
