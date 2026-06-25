@@ -9,13 +9,7 @@ class MarketsController < Sinatra::Base
     markets = Market.nearby_markets(params)
     json MarketSerializer.new(markets)
   end
-
-  get '/markets/favorites' do 
-    market_ids = Array(params[:market_ids]).reject(&:blank?)
-    markets = Market.where(id: market_ids)
-    json MarketSerializer.new(markets)
-  end
-
+  
   get '/markets/:id' do 
     market = Market.find(params[:id])
     json MarketSerializer.new(market)
