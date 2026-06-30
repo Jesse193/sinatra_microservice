@@ -19,6 +19,9 @@ Should it be necessary to install this application on your local machine, follow
 3. To run this application locally, run this from the command line: 
  - ```bundle exec rackup config.ru```
 
+# JWT
+This uses JWT for user authentication and authorization
+
 # API Endpoints
 ## Markets
 GET `api/markets`
@@ -76,4 +79,4 @@ Deletes market from user's favorite markets
 
 
 # Sources: 
-USDA’s Agricultural Marketing Service &amp; Michigan State University. (n.d.). USDA local food directories. USDA Local Food Directories. https://www.usdalocalfoodportal.com/fe/datasharing/ 
+USDA’s Agricultural Marketing Service & Michigan State University. (n.d.). USDA local food directories. USDA Local Food Directories. https://www.usdalocalfoodportal.com/fe/datasharing/ 
