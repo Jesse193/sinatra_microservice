@@ -32,6 +32,33 @@ class Market < ActiveRecord::Base
       ) * 3958.8 <= ?", latitude, latitude, longitude, radius]))
   end
 
+  def self.market_by_address(location_params)
+    params = location_params.transform_keys(&:to_sym)
+    address = params[:address] || params['address']
+
+    return none if address.to_s.strip.empty?
+
+    words = address.to_s.strip.downcase.split
+
+    conditions = words.map { "LOWER(address) LIKE ?" }.join(" OR ")
+    values = words.map { |word| "%#{word}%" }
+
+    where(sanitize_sql_array([conditions, *values]))
+  end
+
+  def self.market_by_name(location_params)
+    params = location_params.transform_keys(&:to_sym)
+    name = params[:name]
+
+    return none if name.to_s.strip.empty?
+
+    where(sanitize_sql_array([
+      "LOWER(name) LIKE ?",
+      "%#{name.to_s.strip.downcase}%"
+    ]))
+  end
+
+
   has_many :user_favorites, dependent: :destroy
   has_many :favorited_by, through: :user_favorites, source: :user
 end
