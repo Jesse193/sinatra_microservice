@@ -67,7 +67,10 @@ RSpec.describe 'Markets', type: :request do
     it 'hits the endpoint' do 
       create(:market, address: "7350 Pine Creek Road, Colorado Springs, Colorado 80919")
       query_params = {
-        address: "7350 Pine Creek, Colorado Springs, Colorado 80919"
+        address_line1: "7350 Pine Creek",
+        city: "Colorado Springs",
+        state: "CO",
+        zip_code: 80919
       }
 
       get 'markets/search', query_params
@@ -77,7 +80,10 @@ RSpec.describe 'Markets', type: :request do
     it 'returns json objects' do 
       create(:market, address: "7350 Pine Creek Road, Colorado Springs, Colorado 80919")
       query_params = {
-        address: "7350 Pine Creek, Colorado Springs, Colorado 80919"
+        address_line1: "7350 Pine Creek",
+        city: "Colorado Springs",
+        state: "CO",
+        zip_code: 80919
       }
 
       get 'markets/search', query_params

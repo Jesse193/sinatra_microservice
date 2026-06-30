@@ -34,16 +34,35 @@ class Market < ActiveRecord::Base
 
   def self.market_by_address(location_params)
     params = location_params.transform_keys(&:to_sym)
-    address = params[:address] || params['address']
 
-    return none if address.to_s.strip.empty?
+    address_line1 = params[:addressLine1]
+    city = params[:city]
+    state = params[:state]
+    zip_code = params[:zipCode]
 
-    words = address.to_s.strip.downcase.split
+    return none if [address_line1, city, state, zip_code].all? { |p| p.to_s.strip.empty? }
 
-    conditions = words.map { "LOWER(address) LIKE ?" }.join(" OR ")
-    values = words.map { |word| "%#{word}%" }
+    conditions = []
+    values = []
 
-    where(sanitize_sql_array([conditions, *values]))
+    if address_line1.present?
+      conditions << "address ILIKE ?"
+      values << "%#{address_line1.strip}%"
+    end
+    if city.present?
+      conditions << "address ILIKE ?"
+      values << "%#{city.strip}%"
+    end
+    if state.present?
+      conditions << "address ILIKE ?"
+      values << "%, #{state.strip}%"
+    end
+    if zip_code.present?
+      conditions << "address ILIKE ?"
+      values << "%#{zip_code.strip}%"
+    end
+
+    where(sanitize_sql_array([conditions.join(" AND "), *values]))
   end
 
   def self.market_by_name(location_params)

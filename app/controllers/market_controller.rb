@@ -8,6 +8,8 @@ class MarketsController < Sinatra::Base
   get '/markets/search' do
     if params[:latitude] && params[:longitude]
       markets = Market.nearby_markets(params)
+    elsif params[:addressLine1] || params[:city] || params[:state] || params[:zipCode]
+      markets = Market.market_by_address(params)
     elsif params[:address]
       markets = Market.market_by_address(params)
     elsif params[:name]
