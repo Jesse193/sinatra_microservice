@@ -114,6 +114,7 @@ class UsersController < Sinatra::Base
       password: @payload['password'] 
     ) 
     if user.save 
+      token = JsonWebToken.encode(user_id: user.id)
       status 201 
       { message: "User successfully registered", user_id: user.id }.to_json 
     else 
