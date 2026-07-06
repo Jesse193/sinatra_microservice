@@ -9,11 +9,16 @@ class UsersController < Sinatra::Base
 
   before do
     content_type :json
-    
-    response.headers['Access-Control-Allow-Origin'] = 'http://localhost:5173'
+
+    allowed_origins = (ENV['ALLOWED_ORIGINS'] || ENV['FRONTEND_ORIGIN'] || 'http://localhost:5173').split(',').map(&:strip).reject(&:empty?)
+    origin = request.env['HTTP_ORIGIN'].to_s
+    if allowed_origins.include?(origin)
+      response.headers['Access-Control-Allow-Origin'] = origin
+      response.headers['Access-Control-Allow-Credentials'] = 'true'
+    end
+
     response.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
     response.headers['Access-Control-Allow-Headers'] = 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Cache-Control, Accept, Authorization'
-    response.headers['Access-Control-Allow-Credentials'] = 'true'
 
     @payload = {}
     if request.env['REQUEST_METHOD'] != 'GET' && request.body
