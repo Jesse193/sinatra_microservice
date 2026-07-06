@@ -1,4 +1,13 @@
 class Market < ActiveRecord::Base
+  MAX_RADIUS_MILES = 500
+  MIN_LATITUDE = -90
+  MAX_LATITUDE = 90
+  MIN_LONGITUDE = -180
+  MAX_LONGITUDE = 180
+
+  has_many :user_favorites, dependent: :destroy
+  has_many :favorited_by, through: :user_favorites, source: :user
+
   def self.accepts_benefits
     where('fnap IS NOT NULL OR snap_option IS NOT NULL')
   end
@@ -22,6 +31,12 @@ class Market < ActiveRecord::Base
     latitude = latitude.to_f
     longitude = longitude.to_f
     radius = radius.to_f
+
+    return none if latitude < MIN_LATITUDE || latitude > MAX_LATITUDE
+    return none if longitude < MIN_LONGITUDE || longitude > MAX_LONGITUDE
+    return none if radius <= 0
+
+    radius = MAX_RADIUS_MILES if radius > MAX_RADIUS_MILES
 
     where(sanitize_sql_array(["acos(
       sin(radians(?))
@@ -47,19 +62,19 @@ class Market < ActiveRecord::Base
 
     if address_line1.present?
       conditions << "address ILIKE ?"
-      values << "%#{address_line1.strip}%"
+      values << "%#{escape_like(address_line1.strip)}%"
     end
     if city.present?
       conditions << "address ILIKE ?"
-      values << "%#{city.strip}%"
+      values << "%#{escape_like(city.strip)}%"
     end
     if state.present?
       conditions << "address ILIKE ?"
-      values << "%, #{state.strip}%"
+      values << "%, #{escape_like(state.strip)}%"
     end
     if zip_code.present?
       conditions << "address ILIKE ?"
-      values << "%#{zip_code.strip}%"
+      values << "%#{escape_like(zip_code.strip)}%"
     end
 
     where(sanitize_sql_array([conditions.join(" AND "), *values]))
@@ -73,11 +88,11 @@ class Market < ActiveRecord::Base
 
     where(sanitize_sql_array([
       "LOWER(name) LIKE ?",
-      "%#{name.to_s.strip.downcase}%"
+      "%#{escape_like(name.to_s.strip.downcase)}%"
     ]))
   end
 
-
-  has_many :user_favorites, dependent: :destroy
-  has_many :favorited_by, through: :user_favorites, source: :user
+  def self.escape_like(string)
+    string.gsub(/[%_\\]/) { |char| "\\#{char}" }
+  end
 end
