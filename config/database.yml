@@ -24,8 +24,10 @@ supabase:
   username: <%= ENV['SUPABASE_DB_USERNAME'] %>
   password: <%= ENV['SUPABASE_DB_PASSWORD'] %>
   host: <%= ENV['SUPABASE_DB_HOSTNAME'] %>
-  port: <%= ENV['SUPABASE_DB_PORT'] || 5432 %>
+  port: <%= ENV['SUPABASE_DB_PORT'] || 6543 %>
   pool: 5
+  prepared_statements: false
+  advisory_locks: false
 
 test: 
   <<: *default

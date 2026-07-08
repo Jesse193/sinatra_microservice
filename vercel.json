@@ -1,0 +1,10 @@
+{
+  "functions": {
+    "app/controllers/microservice_app.rb": {
+      "runtime": "vercel-ruby"
+    }
+  },
+  "rewrites": [
+    { "source": "/(.*)", "destination": "app/controllers/microservice_app.rb" }
+  ]
+}
