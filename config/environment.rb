@@ -8,7 +8,7 @@ APP_ROOT = File.expand_path('..', __dir__)
 # 1. Load and parse database configurations using absolute paths
 db_config_path = File.join(APP_ROOT, "config", "database.yml")
 db_configs = YAML.safe_load(ERB.new(File.read(db_config_path)).result, aliases: true)
-current_env = ENV['RACK_ENV'] || 'development'
+current_env = ENV['DB_ENV'] || ENV['RACK_ENV'] || 'development'
 ActiveRecord::Base.establish_connection(db_configs[current_env])
 
 class MicroserviceApp < Sinatra::Base
