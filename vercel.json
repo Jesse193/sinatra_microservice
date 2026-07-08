@@ -1,7 +1,7 @@
 {
   "functions": {
     "app/controllers/microservice_app.rb": {
-      "runtime": "vercel-ruby"
+      "runtime": "vercel-ruby@2.2.32"
     }
   },
   "rewrites": [
