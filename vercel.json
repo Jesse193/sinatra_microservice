@@ -1,10 +1,10 @@
 {
   "functions": {
-    "app/controllers/microservice_app.rb": {
+    "api/config.ru": {
       "runtime": "vercel-ruby@2.2.32"
     }
   },
-  "rewrites": [
-    { "source": "/(.*)", "destination": "app/controllers/microservice_app.rb" }
+  "routes": [
+    { "src": "/(.*)", "dest": "/api/config.ru" }
   ]
 }
