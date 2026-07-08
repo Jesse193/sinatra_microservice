@@ -8,8 +8,9 @@ APP_ROOT = File.expand_path('..', __dir__)
 # 1. Load and parse database configurations using absolute paths
 db_config_path = File.join(APP_ROOT, "config", "database.yml")
 db_configs = YAML.safe_load(ERB.new(File.read(db_config_path)).result, aliases: true)
-current_env = ENV['DB_ENV'] || ENV['RACK_ENV'] || 'development'
-ActiveRecord::Base.establish_connection(db_configs[current_env])
+current_env = ENV['DB_ENV'] || ENV['RACK_ENV'] || (ENV['VERCEL'] ? 'production' : 'development')
+db_config = db_configs[current_env] || db_configs['production'] || db_configs['supabase'] || db_configs['development']
+ActiveRecord::Base.establish_connection(db_config)
 
 class MicroserviceApp < Sinatra::Base
   set :method_override, true
