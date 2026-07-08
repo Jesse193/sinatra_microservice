@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '3.3.0'
+ruby '4.0.5'
 
 gem 'sinatra', require: 'sinatra/base'
 gem 'pg'
