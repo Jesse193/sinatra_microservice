@@ -2,8 +2,8 @@ require 'sinatra'
 require 'bundler'
 Bundler.require
 
-require File.expand_path('../../config/environment', __FILE__)
-require File.expand_path('../../app/controllers/password_resets_controller', __FILE__)
+require_relative 'config/environment'
+require_relative 'app/controllers/password_resets_controller'
 
 map '/' do
   run MicroserviceApp
