@@ -8,8 +8,10 @@ APP = Rack::Builder.new do
   end
 
   map '/api' do
-    use MarketsController
-    use PasswordResetsController
-    run UsersController
+    run Rack::Cascade.new([
+      MarketsController.new,
+      PasswordResetsController.new,
+      UsersController.new
+    ])
   end
 end.to_app
