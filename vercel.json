@@ -1,10 +1,10 @@
 {
   "functions": {
-    "api/config.ru": {
+    "api/config.rb": {
       "runtime": "vercel-ruby@2.2.32"
     }
   },
   "routes": [
-    { "src": "/(.*)", "dest": "/api/config.ru" }
+    { "src": "/(.*)", "dest": "/api/config.rb" }
   ]
 }
