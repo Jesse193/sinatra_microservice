@@ -5,10 +5,13 @@ Handler = Proc.new do |req|
   request_hash = req || {}
   headers = request_hash['headers'] || {}
   body = request_hash['body'].to_s
+  path = request_hash['path'].to_s
+  path = '/' if path.empty?
+  path = path.sub(%r{^/}, '/')
 
   env = {
     'REQUEST_METHOD' => request_hash['method'] || 'GET',
-    'PATH_INFO' => request_hash['path'] || '/',
+    'PATH_INFO' => path,
     'QUERY_STRING' => request_hash['query'].to_s,
     'SERVER_NAME' => 'localhost',
     'SERVER_PORT' => '80',
