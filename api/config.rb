@@ -13,6 +13,7 @@ Handler = Proc.new do |req|
     'REQUEST_METHOD' => request_hash['method'] || 'GET',
     'PATH_INFO' => path,
     'QUERY_STRING' => request_hash['query'].to_s,
+    'SCRIPT_NAME' => '',
     'SERVER_NAME' => 'localhost',
     'SERVER_PORT' => '80',
     'rack.input' => StringIO.new(body),
