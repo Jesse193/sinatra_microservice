@@ -10,7 +10,13 @@ db_config_path = File.join(APP_ROOT, "config", "database.yml")
 db_configs = YAML.safe_load(ERB.new(File.read(db_config_path)).result, aliases: true)
 current_env = ENV['DB_ENV'] || ENV['RACK_ENV'] || (ENV['VERCEL'] ? 'production' : 'development')
 db_config = db_configs[current_env] || db_configs['production'] || db_configs['supabase'] || db_configs['development']
-ActiveRecord::Base.establish_connection(db_config)
+
+begin
+  ActiveRecord::Base.establish_connection(db_config)
+rescue StandardError => e
+  warn "Database connection failed during boot: #{e.message}"
+  ActiveRecord::Base.establish_connection(adapter: 'sqlite3', database: ':memory:') if ENV['VERCEL']
+end
 
 class MicroserviceApp < Sinatra::Base
   set :method_override, true
