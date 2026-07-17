@@ -26,6 +26,11 @@ Handler = Proc.new do |req|
   }
 
   status, headers_out, body_out = APP.call(env)
+  
+  warn "STATUS: #{status.inspect}"
+  warn "HEADERS: #{headers_out.inspect}"
+  warn "BODY_OUT class: #{body_out.class}"
+  warn "BODY_OUT to_a: #{body_out.each.to_a.inspect[0..500]}"
 
   {
     'statusCode' => status,
