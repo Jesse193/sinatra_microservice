@@ -25,8 +25,9 @@ Handler = Proc.new do |req|
     'CONTENT_LENGTH' => body.bytesize.to_s
   }
 
+  warn "PATH_INFO being routed: #{env['PATH_INFO'].inspect}"
   status, headers_out, body_out = APP.call(env)
-  
+
   warn "STATUS: #{status.inspect}"
   warn "HEADERS: #{headers_out.inspect}"
   warn "BODY_OUT class: #{body_out.class}"
