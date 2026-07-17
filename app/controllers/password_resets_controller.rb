@@ -2,7 +2,7 @@ require 'sinatra'
 require 'json'
 require_relative '../services/password_reset_mailer'
 
-class PasswordResetsController < Sinatra::Base
+class PasswordResetsController < ApiBase
   configure do
     set :logging, true
   end

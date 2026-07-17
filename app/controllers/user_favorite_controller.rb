@@ -2,7 +2,7 @@ require 'sinatra'
 require 'json'
 require_relative '../services/json_web_token'
 
-class UserFavoritesController < Sinatra::Base
+class UserFavoritesController < ApiBase
 
   configure do
     set :logging, true

@@ -18,7 +18,15 @@ rescue StandardError => e
   raise
 end
 
-class MicroserviceApp < Sinatra::Base
+class ApiBase < Sinatra::Base
+  set :host_authorization, permitted_hosts: [
+    'foodhaven.vercel.app',
+    /.*\.vercel\.app$/,
+    ENV['VERCEL_URL']
+  ].compact
+end
+
+class MicroserviceApp < ApiBase
   set :method_override, true
   set :root, APP_ROOT
 end

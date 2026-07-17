@@ -11,7 +11,7 @@ require_relative './user_controller'
 require_relative './market_controller'
 require_relative './user_favorite_controller'
 
-class MicroserviceApp < Sinatra::Base
+class MicroserviceApp < ApiBase
   def self.allowed_origins
     origins = ENV['ALLOWED_ORIGINS'] || ENV['FRONTEND_ORIGIN'] || 'http://localhost:5173'
     origins.split(',').map(&:strip).reject(&:empty?)
