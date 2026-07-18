@@ -1,4 +1,4 @@
-class MarketsController < Sinatra::Base
+class MarketsController < ApiBase
   set :default_content_type, 'application/json'
   get '/markets' do 
     markets = Market.all

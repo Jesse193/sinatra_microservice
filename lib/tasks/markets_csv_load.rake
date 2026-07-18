@@ -3,13 +3,14 @@ require './app/models/market'
 
 namespace :csv_load do 
   task markets: :environment do 
-    csv = CSV.foreach("./db/data/farmersmarkets.csv", :headers => true) do |row|
+    CSV.foreach("./db/data/farmersmarkets.csv", headers: true) do |row|
+      next if row['listing_name'].nil? || row['location_x'].nil? || row['location_y'].nil?
+
       Market.create!(
-        id: row['id'],
         name: row['listing_name'],
         address: row['location_address'],
         site: row['location_site'],
-        description: row['location_desc'],
+        description: row['listing_desc'],
         fnap: row['FNAP'],
         snap_option: row['SNAP_option'],
         accepted_payment: row['acceptedpayment'],
@@ -17,6 +18,5 @@ namespace :csv_load do
         latitude: row['location_y']
       )
     end
-    ActiveRecord::Base.connection.reset_pk_sequence!('markets')
   end
 end

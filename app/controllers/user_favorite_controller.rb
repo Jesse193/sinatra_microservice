@@ -2,7 +2,7 @@ require 'sinatra'
 require 'json'
 require_relative '../services/json_web_token'
 
-class UserFavoritesController < Sinatra::Base
+class UserFavoritesController < ApiBase
 
   configure do
     set :logging, true
@@ -10,6 +10,14 @@ class UserFavoritesController < Sinatra::Base
 
   before do
     content_type :json
+
+    allowed_origins = (ENV['ALLOWED_ORIGINS'] || ENV['FRONTEND_ORIGIN'] || 'http://localhost:5173').split(',').map(&:strip).reject(&:empty?)
+    origin = request.env['HTTP_ORIGIN'].to_s
+    if allowed_origins.include?(origin)
+      response.headers['Access-Control-Allow-Origin'] = origin
+      response.headers['Access-Control-Allow-Credentials'] = 'true'
+    end
+
     if request.body && request.body.respond_to?(:size) && request.body.size.to_i > 0
       request.body.rewind
       @payload = JSON.parse(request.body.read) rescue {}

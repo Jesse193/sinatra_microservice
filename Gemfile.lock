@@ -73,6 +73,8 @@ GEM
     puma (8.0.2)
       nio4r (~> 2.0)
     rack (3.2.6)
+    rack-contrib (2.5.0)
+      rack (< 4)
     rack-cors (3.0.0)
       logger
       rack (>= 3.0.14)
@@ -157,6 +159,7 @@ DEPENDENCIES
   pry
   puma
   rack
+  rack-contrib
   rack-cors
   rack-test
   rackup
@@ -169,7 +172,7 @@ DEPENDENCIES
   sinatra-contrib
 
 RUBY VERSION
-   ruby 4.0.5p0
+  ruby 3.3.0
 
 BUNDLED WITH
-   2.4.17
+  4.0.16

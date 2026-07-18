@@ -11,11 +11,16 @@ require_relative './user_controller'
 require_relative './market_controller'
 require_relative './user_favorite_controller'
 
-class MicroserviceApp < Sinatra::Base
+class MicroserviceApp < ApiBase
+  def self.allowed_origins
+    origins = ENV['ALLOWED_ORIGINS'] || ENV['FRONTEND_ORIGIN'] || 'http://localhost:5173'
+    origins.split(',').map(&:strip).reject(&:empty?)
+  end
+
   use Rack::Cors do
     allow do
-      origins %r{\Ahttp://localhost(?::\d+)?\z}
-      resource '/*', headers: :any, methods: [:get, :post, :options]
+      origins MicroserviceApp.allowed_origins
+      resource '/*', headers: :any, methods: [:get, :post, :put, :patch, :delete, :options], credentials: true
     end
   end
 
