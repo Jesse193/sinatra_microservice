@@ -20,10 +20,50 @@ end
 
 class ApiBase < Sinatra::Base
   set :host_authorization, permitted_hosts: [
-    'foodhaven.vercel.app',
+    'sinatra-api.vercel.app',
     /.*\.vercel\.app$/,
     ENV['VERCEL_URL']
   ].compact
+  
+  before do
+    content_type :json
+
+    allowed_origins = (
+      ENV['ALLOWED_ORIGINS'] ||
+      ENV['FRONTEND_ORIGIN'] ||
+      'http://localhost:5173'
+    ).split(',')
+     .map { |o| o.strip.chomp('/') }
+     .reject(&:empty?)
+
+    origin = request.env['HTTP_ORIGIN'].to_s.chomp('/')
+
+    if allowed_origins.include?(origin)
+      response['Access-Control-Allow-Origin'] = origin
+      response['Access-Control-Allow-Credentials'] = 'true'
+    end
+
+    response['Access-Control-Allow-Methods'] =
+      'GET, POST, PUT, PATCH, DELETE, OPTIONS'
+
+    response['Access-Control-Allow-Headers'] =
+      'Content-Type, Authorization, Accept, X-Requested-With'
+
+    @payload = {}
+
+    if %w[POST PUT PATCH DELETE].include?(request.request_method)
+      request.body.rewind
+      body = request.body.read
+      @payload = body.empty? ? {} : JSON.parse(body)
+      request.body.rewind
+    end
+  rescue JSON::ParserError
+    @payload = {}
+  end
+
+  options '*' do
+    status 200
+  end
 end
 
 class MicroserviceApp < ApiBase

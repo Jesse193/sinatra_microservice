@@ -2,6 +2,14 @@ require_relative '../config/environment'
 require_relative 'app'
 
 Handler = Proc.new do |request, response|
+  body =
+    if request.body.respond_to?(:read)
+      request.body.rewind if request.body.respond_to?(:rewind)
+      request.body.read
+    else
+      request.body.to_s
+    end
+
   env = {
     'REQUEST_METHOD' => request.request_method,
     'PATH_INFO'       => request.path,
@@ -9,7 +17,7 @@ Handler = Proc.new do |request, response|
     'SCRIPT_NAME'     => '',
     'SERVER_NAME'     => 'localhost',
     'SERVER_PORT'     => '80',
-    'rack.input'      => StringIO.new(request.body.to_s),
+    'rack.input'      => StringIO.new(body),
     'rack.errors'     => $stderr,
     'HTTP_HOST'          => request['host'].to_s,
     'HTTP_ORIGIN'        => request['origin'].to_s,
