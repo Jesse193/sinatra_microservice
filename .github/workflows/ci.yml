@@ -17,7 +17,7 @@ jobs:
           - 5432:5432
         env:
           POSTGRES_PASSWORD: password
-          POSTGRES_DB: sinatra_test
+          POSTGRES_DB: microservice_sinatra_test
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -37,15 +37,13 @@ jobs:
     - name: Prepare test database
       env:
         RACK_ENV: test
-        DATABASE_URL: postgres://postgres:password@localhost:5432/sinatra_test
-      run: bundle exec rake db:migrate
+        DATABASE_URL: postgres://postgres:password@localhost:5432/microservice_sinatra_test
+      run: |
+        bundle exec rake db:create
+        bundle exec rake db:migrate
 
     - name: Run automated tests
       env:
         RACK_ENV: test
-        DB_USERNAME: postgres
-        DB_PASSWORD: password
-        DB_HOST: localhost
-        DB_PORT: 5432
-      run: |
-        bundle exec rspec
+        DATABASE_URL: postgres://postgres:password@localhost:5432/microservice_sinatra_test
+      run: bundle exec rspec
