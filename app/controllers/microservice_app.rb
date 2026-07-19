@@ -9,7 +9,6 @@ require_relative '../serializers/user_serializer'
 require_relative '../serializers/market_serializer'
 require_relative './user_controller'
 require_relative './market_controller'
-require_relative './user_favorite_controller'
 
 class MicroserviceApp < ApiBase
   def self.allowed_origins
@@ -44,5 +43,4 @@ class MicroserviceApp < ApiBase
 
   use MarketsController
   use UsersController
-  use UserFavoritesController
 end
