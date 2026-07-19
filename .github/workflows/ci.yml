@@ -34,9 +34,18 @@ jobs:
         ruby-version: '3.3'
         bundler-cache: true
 
-    - name: Run automated tests
+    - name: Prepare test database
       env:
         RACK_ENV: test
         DATABASE_URL: postgres://postgres:password@localhost:5432/sinatra_test
+      run: bundle exec rake db:migrate
+
+    - name: Run automated tests
+      env:
+        RACK_ENV: test
+        DB_USERNAME: postgres
+        DB_PASSWORD: password
+        DB_HOST: localhost
+        DB_PORT: 5432
       run: |
         bundle exec rspec
