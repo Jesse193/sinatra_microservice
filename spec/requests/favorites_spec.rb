@@ -12,11 +12,11 @@ RSpec.describe 'Markets', type: :request do
   describe 'find favorites' do
     it 'gets users favorites' do
 
-      user = create(:user, email: 'johndoe@example.com', name: 'John Doe', password: 'password123')
+      user = create(:user, email: 'johndoe@example.com', name: 'John Doe', password: 'G00d143!')
 
       payload = {
         email: 'johndoe@example.com',
-        password: 'password123'
+        password: 'G00d143!'
       }
 
       post '/api/login', payload.to_json, { 'CONTENT_TYPE' => 'application/json' }
@@ -33,7 +33,7 @@ RSpec.describe 'Markets', type: :request do
         'HTTP_AUTHORIZATION' => "Bearer #{token}"
       }
 
-      get '/markets/favorites'
+      get '/api/favorites',  {}, { 'HTTP_AUTHORIZATION' => "Bearer #{token}" }
 
       expect(last_response).to be_successful
       expect(user.reload.favorite_markets).to include(@market_1)

@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 RSpec.describe 'Protected Endpoints Authentication', type: :request do
-  let!(:user) { create(:user, email: 'guard@example.com', password: 'securepassword123') }
+  let!(:user) { create(:user, email: 'guard@example.com', password: 'Securepassword123!') }
   
   let(:valid_token) { JsonWebToken.encode(user_id: user.id) }
   let(:invalid_token) { 'this-is-a-fake-untrusted-token-string' }

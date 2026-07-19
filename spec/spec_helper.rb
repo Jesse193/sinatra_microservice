@@ -9,7 +9,7 @@ require 'rack/test'
 require 'bundler'
 Bundler.require(:default, :test)
 
-require File.expand_path('../../config/environment.rb', __FILE__)
+require File.expand_path('../../api/app.rb', __FILE__)
 require 'factory_bot'
 
 RSpec.configure do |config|
@@ -17,7 +17,7 @@ RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
 
   def app
-    MicroserviceApp
+    APP
   end
 
   config.before(:suite) do

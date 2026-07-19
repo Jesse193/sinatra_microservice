@@ -8,13 +8,13 @@ RSpec.describe 'Markets' do
 
   describe 'find a single market' do
     it 'hits the endpoint' do 
-      get "markets/#{@market.id}"
+      get "api/markets/#{@market.id}"
       
       expect(last_response).to be_successful
     end
     
     it 'returns json object for the correct market' do 
-      get "markets/#{@market.id}"
+      get "api/markets/#{@market.id}"
 
       market = JSON.parse(last_response.body, symbolize_names: true)[:data]
       
