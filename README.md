@@ -71,6 +71,8 @@ params: {market_id: {#market_id}}
 
 Deletes market from user's favorite markets
 
+## Vercel
+This branch is a Serverless function version that utilizes a database hosted on Supabase and is ready for deployment to Vercel
 
 ## Authors
 ### I worked on this fork so that I could further refactor, add more features, and deploy
