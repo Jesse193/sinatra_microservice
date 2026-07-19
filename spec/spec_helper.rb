@@ -21,10 +21,12 @@ RSpec.configure do |config|
   end
 
   config.before(:suite) do
-    db_config = YAML.safe_load_file(
-      File.expand_path('../../config/database.yml', __FILE__), 
+    db_config_path = File.expand_path('../../config/database.yml', __FILE__)
+    db_config = YAML.safe_load(
+      ERB.new(File.read(db_config_path)).result,
       aliases: true
     )['test']
+    
     ActiveRecord::Base.establish_connection(db_config)
 
     User.reset_column_information rescue nil
