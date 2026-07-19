@@ -15,7 +15,7 @@ RSpec.describe 'Markets', type: :request do
         radius: 50
       }
 
-      get 'markets/search', query_params
+      get 'api/markets/search', query_params
 
       expect(last_response).to be_successful
     end
@@ -27,7 +27,7 @@ RSpec.describe 'Markets', type: :request do
         radius: 50
       }
 
-      get 'markets/search', query_params
+      get 'api/markets/search', query_params
 
       markets = JSON.parse(last_response.body, symbolize_names: true)[:data]
 
@@ -73,7 +73,7 @@ RSpec.describe 'Markets', type: :request do
         zip_code: 80919
       }
 
-      get 'markets/search', query_params
+      get 'api/markets/search', query_params
 
       expect(last_response).to be_successful
     end
@@ -86,7 +86,7 @@ RSpec.describe 'Markets', type: :request do
         zip_code: 80919
       }
 
-      get 'markets/search', query_params
+      get 'api/markets/search', query_params
 
       markets = JSON.parse(last_response.body, symbolize_names: true)[:data]
       
@@ -102,7 +102,7 @@ RSpec.describe 'Markets', type: :request do
         name: "Guadal"
       }
 
-      get 'markets/search', query_params
+      get 'api/markets/search', query_params
 
       expect(last_response).to be_successful
     end
@@ -112,7 +112,7 @@ RSpec.describe 'Markets', type: :request do
         name: "Guadal"
       }
 
-      get 'markets/search', query_params
+      get 'api/markets/search', query_params
 
       markets = JSON.parse(last_response.body, symbolize_names: true)[:data]
 

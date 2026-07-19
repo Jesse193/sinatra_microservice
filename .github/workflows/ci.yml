@@ -1,0 +1,51 @@
+name: Sinatra CI
+
+on:
+  push:
+    branches: [ "main",  "ci" ]
+  pull_request:
+    branches: [ "main", "ci" ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: microservice_sinatra_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '3.3'
+        bundler-cache: true
+
+    - name: Prepare test database
+      env:
+        RACK_ENV: test
+        DATABASE_URL: postgres://postgres:password@localhost:5432/microservice_sinatra_test
+        JWT_SECRET: test_jwt_secret_for_ci_only
+      run: |
+        bundle exec rake db:create
+        bundle exec rake db:migrate
+
+    - name: Run automated tests
+      env:
+        RACK_ENV: test
+        DATABASE_URL: postgres://postgres:password@localhost:5432/microservice_sinatra_test
+        JWT_SECRET: test_jwt_secret_for_ci_only
+      run: bundle exec rspec

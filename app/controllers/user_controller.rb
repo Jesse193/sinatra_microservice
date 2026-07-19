@@ -47,7 +47,7 @@ class UsersController < ApiBase
 
     if favorite.save
       status 201
-      favorite.to_json
+      { message: "Favorite added successfully", favorite: { user_id: favorite.user_id, market_id: favorite.market_id } }.to_json
     else
       status 422
       { errors: favorite.errors.full_messages }.to_json

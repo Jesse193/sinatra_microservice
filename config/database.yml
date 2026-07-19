@@ -29,8 +29,12 @@ supabase:
   prepared_statements: false
   advisory_locks: false
 
-test: 
+test:
   <<: *default
   database: microservice_sinatra_test
+  username: <%= ENV.fetch('DB_USERNAME', 'postgres') %>
+  password: <%= ENV.fetch('DB_PASSWORD', 'password') %>
+  host: <%= ENV.fetch('DB_HOST', 'localhost') %>
+  port: <%= ENV.fetch('DB_PORT', 5432) %>
 
 #when deploying, remember this was important: `rake db:environment:set`

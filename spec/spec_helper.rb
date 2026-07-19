@@ -9,7 +9,7 @@ require 'rack/test'
 require 'bundler'
 Bundler.require(:default, :test)
 
-require File.expand_path('../../config/environment.rb', __FILE__)
+require File.expand_path('../../api/app.rb', __FILE__)
 require 'factory_bot'
 
 RSpec.configure do |config|
@@ -17,14 +17,16 @@ RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
 
   def app
-    MicroserviceApp
+    APP
   end
 
   config.before(:suite) do
-    db_config = YAML.safe_load_file(
-      File.expand_path('../../config/database.yml', __FILE__), 
+    db_config_path = File.expand_path('../../config/database.yml', __FILE__)
+    db_config = YAML.safe_load(
+      ERB.new(File.read(db_config_path)).result,
       aliases: true
     )['test']
+    
     ActiveRecord::Base.establish_connection(db_config)
 
     User.reset_column_information rescue nil

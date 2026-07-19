@@ -2,14 +2,14 @@ require 'spec_helper'
 
 RSpec.describe 'User adds a favorite', type: :request do
   it 'adds a favorite' do
-    user = create(:user, email: 'johndoe@example.com', name: 'John Doe', password: 'password123')
+    user = create(:user, email: 'johndoe@example.com', name: 'John Doe', password: 'G00d143!')
     market = create(:market)
 
     payload = {
       email: 'johndoe@example.com',
-      password: 'password123'
+      password: 'G00d143!'
     }
-
+    
     post '/api/login', payload.to_json, { 'CONTENT_TYPE' => 'application/json' }
 
     token = JSON.parse(last_response.body)['token']
