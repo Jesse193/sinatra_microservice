@@ -38,6 +38,7 @@ jobs:
       env:
         RACK_ENV: test
         DATABASE_URL: postgres://postgres:password@localhost:5432/microservice_sinatra_test
+        JWT_SECRET: test_jwt_secret_for_ci_only
       run: |
         bundle exec rake db:create
         bundle exec rake db:migrate
@@ -46,4 +47,5 @@ jobs:
       env:
         RACK_ENV: test
         DATABASE_URL: postgres://postgres:password@localhost:5432/microservice_sinatra_test
+        JWT_SECRET: test_jwt_secret_for_ci_only
       run: bundle exec rspec
