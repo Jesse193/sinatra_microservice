@@ -10,7 +10,7 @@ class PasswordResetsController < ApiBase
   GENERIC_REQUEST_MESSAGE = "If an account with that email exists, we've sent password reset instructions.".freeze
 
   post '/password_resets' do
-    request.body.rewind
+    request.body.rewind if request.body.respond_to?(:rewind)
     body = request.body.read
     payload = body.empty? ? {} : JSON.parse(body)
 
@@ -42,7 +42,7 @@ class PasswordResetsController < ApiBase
   end
 
   put '/password_resets/:token' do
-    request.body.rewind
+    request.body.rewind if request.body.respond_to?(:rewind)
     body = request.body.read
     payload = body.empty? ? {} : JSON.parse(body)
 
