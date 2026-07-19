@@ -19,11 +19,13 @@ rescue StandardError => e
 end
 
 class ApiBase < Sinatra::Base
-  set :host_authorization, permitted_hosts: [
-    'sinatra-api.vercel.app',
-    /.*\.vercel\.app$/,
-    ENV['VERCEL_URL']
-  ].compact
+  configure :production do
+    set :host_authorization, permitted_hosts: [
+      'sinatra-api.vercel.app',
+      /.*\.vercel\.app$/,
+      ENV['VERCEL_URL']
+    ].compact
+  end
   
   before do
     content_type :json
