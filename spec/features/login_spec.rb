@@ -14,4 +14,16 @@ RSpec.describe "Login", type: :feature do
     click_button "Login"
     expect(page).to have_content("Welcome")
   end
+
+  it "rejects invalid login credentials" do
+    visit "/"
+
+    click_button "Accept"
+
+    fill_in "email", with: user.email
+    fill_in "password", with: "wrongpassword"
+
+    click_button "Login"
+    expect(page).to have_content("Invalid email or password")
+  end
 end
