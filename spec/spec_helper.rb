@@ -52,40 +52,6 @@ RSpec.configure do |config|
   end
 
   config.before(:suite) do
-
-    puts "Starting Sinatra..."
-    $sinatra_pid = spawn(
-      "RACK_ENV=test bundle exec rackup -p 9292",
-      chdir: ".",
-      out: $stdout,
-      err: $stderr
-    )
-
-    puts "Starting Vite..."
-    $vite_pid = spawn(
-      "npm",
-      "run",
-      "dev",
-      "--",
-      "--host",
-      "127.0.0.1",
-      "--port",
-      "5173",
-      chdir: "../food_haven_react_fe",
-      out: $stdout,
-      err: $stderr
-    )
-
-    puts "Waiting for Sinatra..."
-    wait_for_port(9292)
-    puts "Sinatra is up."
-
-    puts "Waiting for Vite..."
-    wait_for_port(5173)
-    puts "Vite is up."
-
-    puts "Servers are ready."
-
     db_config_path = File.expand_path('../../config/database.yml', __FILE__)
     db_config = YAML.safe_load(
       ERB.new(File.read(db_config_path)).result,
@@ -106,6 +72,51 @@ RSpec.configure do |config|
     ]
 
     FactoryBot.find_definitions
+  end
+
+  config.before(:each, type: :feature) do
+    unless $sinatra_pid && $vite_pid
+
+      puts "Starting Sinatra..."
+
+      $sinatra_pid = spawn(
+        {"RACK_ENV" => "test", "SINATRA_ENV" => "test"},
+        "bundle exec rackup -p 9292",
+        chdir: ".",
+        out: $stdout,
+        err: $stderr
+      )
+
+      puts "Starting Vite..."
+
+      $vite_pid = spawn(
+        "npm",
+        "run",
+        "dev",
+        "--",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "5173",
+        chdir: "../food_haven_react_fe",
+        out: $stdout,
+        err: $stderr
+      )
+
+      wait_for_port(9292)
+      wait_for_port(5173)
+
+      puts "Servers ready."
+    end
+  end
+
+  config.before(:each) do
+    DatabaseCleaner.strategy = :transaction
+    DatabaseCleaner.start
+  end
+
+  config.after(:each) do
+    DatabaseCleaner.clean
   end
 
   config.before(:each, type: :feature) do
