@@ -112,12 +112,21 @@ RSpec.configure do |config|
     end
   end
 
-  config.before(:each) do
+  config.before(:each, type: :request) do
     DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.start
   end
 
-  config.after(:each) do
+  config.after(:each, type: :request) do
+    DatabaseCleaner.clean
+  end
+
+  config.before(:each, type: :model) do
+    DatabaseCleaner.strategy = :transaction
+    DatabaseCleaner.start
+  end
+
+  config.after(:each, type: :model) do
     DatabaseCleaner.clean
   end
 
