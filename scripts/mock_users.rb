@@ -22,11 +22,11 @@ rescue LoadError
 end
 
 MOCK_USERS = [
-  { name: 'Alice Baker', email: 'alice@example.com', password: 'password1' },
-  { name: 'Bob Carter', email: 'bob@example.com', password: 'password2' },
-  { name: 'Carol Davis', email: 'carol@example.com', password: 'password3' },
-  { name: 'Dan Edwards', email: 'dan@example.com', password: 'password4' },
-  { name: 'Eve Fisher', email: 'eve@example.com', password: 'password5' }
+  { name: 'Alice Baker', email: 'alice@example.com', password: 'S3cureP@ssword' },
+  { name: 'Bob Carter', email: 'bob@example.com', password: 'S3cureP@ssword2' },
+  { name: 'Carol Davis', email: 'carol@example.com', password: 'S3cureP@ssword3' },
+  { name: 'Dan Edwards', email: 'dan@example.com', password: 'S3cureP@ssword4' },
+  { name: 'Eve Fisher', email: 'eve@example.com', password: 'S3cureP@ssword5' }
 ].freeze
 
 unless defined?(User)

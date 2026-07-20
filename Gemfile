@@ -27,4 +27,8 @@ group :test do
   gem 'factory_bot'
   gem 'faker'
   gem 'simplecov'
+  gem "capybara"
+  gem "capybara-playwright-driver"
+  gem "rspec"
+  gem "launchy"
 end

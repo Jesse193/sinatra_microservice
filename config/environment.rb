@@ -52,12 +52,10 @@ class ApiBase < Sinatra::Base
       'Content-Type, Authorization, Accept, X-Requested-With'
 
     @payload = {}
-
+    
     if %w[POST PUT PATCH DELETE].include?(request.request_method)
-      request.body.rewind
-      body = request.body.read
+      body = request.env['CACHED_RAW_BODY'].to_s
       @payload = body.empty? ? {} : JSON.parse(body)
-      request.body.rewind
     end
   rescue JSON::ParserError
     @payload = {}
