@@ -88,6 +88,8 @@ RSpec.configure do |config|
       )
 
       puts "Starting Vite..."
+      
+      frontend_dir = ENV.fetch("FRONTEND_DIR", "../food_haven_react_fe")
 
       $vite_pid = spawn(
         "npm",
@@ -98,7 +100,7 @@ RSpec.configure do |config|
         "127.0.0.1",
         "--port",
         "5173",
-        chdir: "../food_haven_react_fe",
+        chdir: frontend_dir,
         out: $stdout,
         err: $stderr
       )
