@@ -12,6 +12,37 @@ Bundler.require(:default, :test)
 require File.expand_path('../../api/app.rb', __FILE__)
 require 'factory_bot'
 
+require "capybara/rspec"
+require "capybara-playwright-driver"
+
+Capybara.register_driver(:playwright) do |app|
+  Capybara::Playwright::Driver.new(
+    app,
+    browser_type: :chromium,
+    headless: ENV["HEADFUL"] != "1"
+  )
+end
+
+Capybara.default_driver = :playwright
+Capybara.javascript_driver = :playwright
+
+Capybara.run_server = false
+Capybara.app_host = "http://127.0.0.1:5173"
+
+require "socket"
+require "timeout"
+
+def wait_for_port(port, timeout: 15)
+  Timeout.timeout(timeout) do
+    loop do
+      TCPSocket.new("127.0.0.1", port).close
+      break
+    rescue Errno::ECONNREFUSED
+      sleep 0.2
+    end
+  end
+end
+
 RSpec.configure do |config|
   config.include Rack::Test::Methods
   config.include FactoryBot::Syntax::Methods
@@ -21,6 +52,40 @@ RSpec.configure do |config|
   end
 
   config.before(:suite) do
+
+    puts "Starting Sinatra..."
+    $sinatra_pid = spawn(
+      "RACK_ENV=test bundle exec rackup -p 9292",
+      chdir: ".",
+      out: $stdout,
+      err: $stderr
+    )
+
+    puts "Starting Vite..."
+    $vite_pid = spawn(
+      "npm",
+      "run",
+      "dev",
+      "--",
+      "--host",
+      "127.0.0.1",
+      "--port",
+      "5173",
+      chdir: "../food_haven_react_fe",
+      out: $stdout,
+      err: $stderr
+    )
+
+    puts "Waiting for Sinatra..."
+    wait_for_port(9292)
+    puts "Sinatra is up."
+
+    puts "Waiting for Vite..."
+    wait_for_port(5173)
+    puts "Vite is up."
+
+    puts "Servers are ready."
+
     db_config_path = File.expand_path('../../config/database.yml', __FILE__)
     db_config = YAML.safe_load(
       ERB.new(File.read(db_config_path)).result,
@@ -40,11 +105,25 @@ RSpec.configure do |config|
     FactoryBot.find_definitions rescue nil
   end
 
-  config.before(:each) do
-    DatabaseCleaner.start
+  config.before(:each, type: :feature) do
+    DatabaseCleaner.strategy = :truncation
+  end
+
+  config.before(:each, type: :request) do
+    DatabaseCleaner.strategy = :transaction
   end
 
   config.after(:each) do
     DatabaseCleaner.clean
+  end
+
+  config.after(:suite) do
+    [$sinatra_pid, $vite_pid].compact.each do |pid|
+      begin
+        Process.kill("TERM", pid)
+        Process.wait(pid)
+      rescue Errno::ESRCH, Errno::ECHILD
+      end
+    end
   end
 end
