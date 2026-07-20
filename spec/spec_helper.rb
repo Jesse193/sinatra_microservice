@@ -101,8 +101,11 @@ RSpec.configure do |config|
     DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.clean_with(:truncation, { except: %w[ar_internal_metadata schema_migrations] })
 
-    FactoryBot.definition_file_paths = [File.expand_path('../spec/factories', __dir__)]
-    FactoryBot.find_definitions rescue nil
+    FactoryBot.definition_file_paths = [
+    File.expand_path('factories', __dir__)
+    ]
+
+    FactoryBot.find_definitions
   end
 
   config.before(:each, type: :feature) do
